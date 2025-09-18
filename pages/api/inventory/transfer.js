@@ -4,6 +4,9 @@ function newId() {
 
 import { setCorsHeaders, handleOptions } from '../../../lib/cors';
 
+// Simple in-memory cache for demo (use Redis/DB in production)
+const processedRequests = new Map();
+
 export default async function handler(req, res) {
   setCorsHeaders(res);
 
@@ -15,16 +18,33 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'POST only' });
   }
 
-  const { sku, from, to, qty } = req.body || {};
+  const { sku, from, to, qty, idempotencyKey } = req.body || {};
 
   if (!sku || !from || !to || !qty) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  // Mock response - u realnom slučaju bi ovo zvao pravi backend/DB
-  return res.status(200).json({
+  // Create idempotency key if not provided
+  const requestKey = idempotencyKey || `${sku}-${from}-${to}-${qty}-${Date.now()}`;
+
+  // Check if request already processed
+  if (processedRequests.has(requestKey)) {
+    console.log('🔄 Duplicate request detected, returning cached response');
+    return res.status(200).json(processedRequests.get(requestKey));
+  }
+
+  // Process new request
+  const response = {
     transferId: newId(),
     status: 'queued',
-    moved: { sku, from, to, qty: Number(qty) }
-  });
+    moved: { sku, from, to, qty: Number(qty) },
+    idempotencyKey: requestKey
+  };
+
+  // Cache response for 5 minutes
+  processedRequests.set(requestKey, response);
+  setTimeout(() => processedRequests.delete(requestKey), 5 * 60 * 1000);
+
+  console.log(`✅ New transfer processed: ${response.transferId}`);
+  return res.status(200).json(response);
 }
