@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Script from 'next/script';
 
 export default function AgentTest() {
   const [open, setOpen] = useState(false);
@@ -34,14 +35,22 @@ export default function AgentTest() {
       <h1>🔵 BlizzardBerry Agent Test</h1>
       <p>Test stranica za frontend i backend akcije kroz BB agenta.</p>
 
-      {/* Widget će biti embedan ovdje - zalijepiti iz BB dashboarda */}
+      {/* BlizzardBerry Agent Widget */}
+      <Script
+        id="blizzardberry-agent"
+        src="https://blizzardberry.com/agent/agent.js"
+        strategy="afterInteractive"
+        data-agent-id="2db456e4-3137-4fa8-9824-462b301b8729"
+      />
+
       <div style={{
-        border: '2px dashed #ccc',
+        border: '2px solid #0070f3',
         padding: 16,
         margin: '16px 0',
-        background: '#f8f9fa'
+        background: '#f0f8ff',
+        borderRadius: 8
       }}>
-        <small>🔧 OVDJE ZALIJEPITI WIDGET SNIPPET IZ BB DASHBOARDA</small>
+        <small>🔵 BlizzardBerry Agent će se pojaviti ovdje</small>
       </div>
 
       <hr style={{ margin: '24px 0' }} />
