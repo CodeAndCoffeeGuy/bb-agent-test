@@ -24,8 +24,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  // Create idempotency key if not provided
-  const requestKey = idempotencyKey || `${sku}-${from}-${to}-${qty}-${Date.now()}`;
+  // Create deterministic idempotency key based on request content only
+  const requestKey = idempotencyKey || `${sku}:${from}:${to}:${qty}`;
 
   // Check if request already processed
   if (processedRequests.has(requestKey)) {
@@ -41,9 +41,9 @@ export default async function handler(req, res) {
     idempotencyKey: requestKey
   };
 
-  // Cache response for 5 minutes
+  // Cache response for 30 minutes (longer to handle agent retries)
   processedRequests.set(requestKey, response);
-  setTimeout(() => processedRequests.delete(requestKey), 5 * 60 * 1000);
+  setTimeout(() => processedRequests.delete(requestKey), 30 * 60 * 1000);
 
   console.log(`✅ New transfer processed: ${response.transferId}`);
   return res.status(200).json(response);
