@@ -1,11 +1,10 @@
-export default function handler(req, res) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+import { setCorsHeaders, handleOptions } from '../../lib/cors';
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+export default function handler(req, res) {
+  setCorsHeaders(res);
+
+  if (handleOptions(req, res)) {
+    return;
   }
 
   return res.status(200).json({
