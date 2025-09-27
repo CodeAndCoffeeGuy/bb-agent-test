@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useCart } from '../contexts/CartContext';
 
 export default function Products() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [addedToCart, setAddedToCart] = useState(null);
@@ -161,6 +163,10 @@ export default function Products() {
     setTimeout(() => setAddedToCart(null), 2000);
   };
 
+  const handleProductClick = (productId) => {
+    router.push(`/product/${productId}`);
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -295,8 +301,9 @@ export default function Products() {
               transition: 'transform 0.2s ease',
               cursor: 'pointer'
             }}
-            onMouseEnter={(e) => e.target.style.transform = 'translateY(-5px)'}
-            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            onClick={() => handleProductClick(product.id)}
             >
               {/* Product Image */}
               <div style={{
@@ -422,7 +429,10 @@ export default function Products() {
                     )}
                   </div>
                   <button
-                    onClick={() => handleAddToCart(product)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
                     style={{
                       background: addedToCart === product.id ? '#2E7D32' : '#4CAF50',
                       color: 'white',
