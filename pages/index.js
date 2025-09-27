@@ -33,10 +33,11 @@ export default function Home() {
           ❄️ Arctic Supply Co.
         </div>
         <div style={{ display: 'flex', gap: '30px' }}>
-          <a href="#products" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Products</a>
-          <a href="#about" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>About</a>
+          <a href="/products" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Products</a>
+          <a href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>About</a>
           <a href="/inventory" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Inventory</a>
           <a href="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Dashboard</a>
+          <a href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Contact</a>
           <a href="/support" style={{
             background: '#4CAF50',
             color: 'white',
@@ -180,9 +181,9 @@ export default function Home() {
             <p style={{ margin: '5px 0', opacity: 0.8 }}>Premium outdoor equipment since 2020</p>
           </div>
           <div style={{ display: 'flex', gap: '30px' }}>
-            <a href="#products" style={{ color: '#ccc', textDecoration: 'none' }}>Products</a>
-            <a href="#about" style={{ color: '#ccc', textDecoration: 'none' }}>About Us</a>
-            <a href="#contact" style={{ color: '#ccc', textDecoration: 'none' }}>Contact</a>
+            <a href="/products" style={{ color: '#ccc', textDecoration: 'none' }}>Products</a>
+            <a href="/about" style={{ color: '#ccc', textDecoration: 'none' }}>About Us</a>
+            <a href="/contact" style={{ color: '#ccc', textDecoration: 'none' }}>Contact</a>
             <a href="/support" style={{ color: '#ccc', textDecoration: 'none' }}>Support</a>
           </div>
         </div>
