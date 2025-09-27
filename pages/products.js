@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import Script from 'next/script';
+import { useCart } from '../contexts/CartContext';
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [addedToCart, setAddedToCart] = useState(null);
+  const { addToCart, getCartItemCount } = useCart();
 
   const products = [
     // Winter Apparel
@@ -152,6 +155,12 @@ export default function Products() {
 
   const categories = ['all', 'Winter Apparel', 'Footwear', 'Camping', 'Winter Sports', 'Climbing'];
 
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    setAddedToCart(product.id);
+    setTimeout(() => setAddedToCart(null), 2000);
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -184,15 +193,46 @@ export default function Products() {
             <h1 style={{ margin: 0, fontSize: '2.5rem' }}>❄️ Arctic Supply Co.</h1>
             <p style={{ margin: '5px 0 0', opacity: 0.9 }}>Premium Outdoor Equipment Catalog</p>
           </div>
-          <a href="/" style={{
-            color: 'white',
-            textDecoration: 'none',
-            padding: '10px 20px',
-            border: '1px solid white',
-            borderRadius: '20px'
-          }}>
-            ← Back to Home
-          </a>
+          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+            <a href="/cart" style={{
+              color: 'white',
+              textDecoration: 'none',
+              padding: '10px 15px',
+              border: '1px solid white',
+              borderRadius: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              position: 'relative'
+            }}>
+              🛒 Cart
+              {getCartItemCount() > 0 && (
+                <span style={{
+                  background: '#ff4444',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                  fontWeight: 'bold'
+                }}>
+                  {getCartItemCount()}
+                </span>
+              )}
+            </a>
+            <a href="/" style={{
+              color: 'white',
+              textDecoration: 'none',
+              padding: '10px 20px',
+              border: '1px solid white',
+              borderRadius: '20px'
+            }}>
+              ← Back to Home
+            </a>
+          </div>
         </div>
 
         {/* Search and Filter */}
@@ -381,17 +421,20 @@ export default function Products() {
                       </span>
                     )}
                   </div>
-                  <button style={{
-                    background: '#4CAF50',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '20px',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
-                  }}>
-                    Add to Cart
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    style={{
+                      background: addedToCart === product.id ? '#2E7D32' : '#4CAF50',
+                      color: 'white',
+                      border: 'none',
+                      padding: '10px 20px',
+                      borderRadius: '20px',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      transition: 'background 0.3s ease'
+                    }}>
+                    {addedToCart === product.id ? '✓ Added!' : 'Add to Cart'}
                   </button>
                 </div>
               </div>
