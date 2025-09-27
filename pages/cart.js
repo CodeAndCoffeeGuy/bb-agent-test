@@ -88,7 +88,9 @@ export default function Cart() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: '2.5rem' }}>❄️ Arctic Supply Co.</h1>
+            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h1 style={{ margin: 0, fontSize: '2.5rem', cursor: 'pointer' }}>❄️ Arctic Supply Co.</h1>
+            </a>
             <p style={{ margin: '5px 0 0', opacity: 0.9 }}>Shopping Cart</p>
           </div>
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>

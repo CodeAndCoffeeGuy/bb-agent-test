@@ -145,7 +145,9 @@ export default function ProductDetail() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: '2rem' }}>❄️ Arctic Supply Co.</h1>
+            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h1 style={{ margin: 0, fontSize: '2rem', cursor: 'pointer' }}>❄️ Arctic Supply Co.</h1>
+            </a>
           </div>
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             <a href="/cart" style={{
