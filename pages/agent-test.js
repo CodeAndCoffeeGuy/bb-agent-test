@@ -5,24 +5,137 @@ export default function AgentTest() {
   const [open, setOpen] = useState(false);
   const [qty, setQty] = useState(1);
   const [submitted, setSubmitted] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [orderProcessed, setOrderProcessed] = useState(null);
+  const [inventoryUpdated, setInventoryUpdated] = useState(null);
+  const [customerInquiry, setCustomerInquiry] = useState('');
+
+  const products = [
+    { sku: 'APW-001', name: 'Arctic Pro Winter Jacket', price: 299.99, stock: 45 },
+    { sku: 'MHB-102', name: 'Mountaineer Hiking Boots', price: 189.99, stock: 8 },
+    { sku: 'AT4-203', name: 'Alpine Tent 4-Person', price: 449.99, stock: 0 },
+    { sku: 'CFP-304', name: 'Carbon Fiber Ski Poles', price: 89.99, stock: 32 },
+    { sku: 'TSB-405', name: 'Thermal Sleeping Bag -20°C', price: 259.99, stock: 12 }
+  ];
 
   useEffect(() => {
-    // Registracija client-side akcija koje BB agent može zvati
+    // Enhanced BB Actions for Arctic Supply Co. demo
     window.bbActions = {
+      // Customer Service Actions
+      openCustomerInquiry: () => {
+        setOpen(true);
+        return { opened: true, type: 'customer_inquiry' };
+      },
+
+      // Inventory Management Actions
+      checkInventory: ({ sku } = {}) => {
+        const product = products.find(p => p.sku === sku);
+        if (product) {
+          return {
+            sku: product.sku,
+            name: product.name,
+            stock: product.stock,
+            price: product.price,
+            status: product.stock > 10 ? 'in_stock' : product.stock > 0 ? 'low_stock' : 'out_of_stock'
+          };
+        }
+        return { error: 'Product not found' };
+      },
+
+      // Order Processing Actions
+      processOrder: ({ sku, quantity = 1, customerInfo = {} } = {}) => {
+        const product = products.find(p => p.sku === sku);
+        if (!product) {
+          return { error: 'Product not found' };
+        }
+
+        if (product.stock < quantity) {
+          return { error: 'Insufficient stock', available: product.stock };
+        }
+
+        const order = {
+          orderId: `ORD-${Date.now()}`,
+          product: product.name,
+          sku: product.sku,
+          quantity: quantity,
+          unitPrice: product.price,
+          totalPrice: product.price * quantity,
+          customer: customerInfo.name || 'Demo Customer',
+          status: 'confirmed',
+          estimatedDelivery: '3-5 business days'
+        };
+
+        setOrderProcessed(order);
+        return order;
+      },
+
+      // Inventory Transfer Actions
+      transferInventory: ({ sku, fromLocation = 'Warehouse A', toLocation = 'Warehouse B', qty = 1 } = {}) => {
+        const product = products.find(p => p.sku === sku);
+        if (!product) {
+          return { error: 'Product not found' };
+        }
+
+        const transfer = {
+          transferId: `TRF-${Date.now()}`,
+          sku: sku,
+          product: product.name,
+          quantity: qty,
+          from: fromLocation,
+          to: toLocation,
+          status: 'completed',
+          timestamp: new Date().toISOString()
+        };
+
+        setInventoryUpdated(transfer);
+        return transfer;
+      },
+
+      // Customer Recommendations
+      getProductRecommendations: ({ category = 'winter', budget = 500 } = {}) => {
+        const recommendations = products
+          .filter(p => p.price <= budget && p.stock > 0)
+          .slice(0, 3)
+          .map(p => ({
+            sku: p.sku,
+            name: p.name,
+            price: p.price,
+            reason: `Perfect for ${category} activities and within your budget`
+          }));
+
+        return { recommendations, budget, category };
+      },
+
+      // Analytics Actions
+      getBusinessInsights: () => {
+        return {
+          totalRevenue: 127850,
+          topSellingCategory: 'Winter Apparel',
+          lowStockAlerts: 3,
+          recentOrdersCount: 15,
+          recommendedActions: [
+            'Reorder Mountaineer Hiking Boots (low stock)',
+            'Increase Winter Jacket inventory (high demand)',
+            'Contact Alpine Tent supplier (out of stock)'
+          ]
+        };
+      },
+
+      // Legacy actions (for compatibility)
       openTestPanel: () => {
         setOpen(true);
         return { opened: true };
       },
+
       fillAndSubmit: ({ qty: q = 1 } = {}) => {
         setOpen(true);
         setQty(q);
-        // Simulacija submit akcije
         setSubmitted({ ok: true, qty: q });
         return { submitted: true, qty: q };
       }
     };
 
-    console.log('BB Actions registered:', window.bbActions);
+    console.log('Arctic Supply Co. BB Actions registered:', Object.keys(window.bbActions));
   }, []);
 
   const onSubmit = (e) => {
@@ -31,100 +144,349 @@ export default function AgentTest() {
   };
 
   return (
-    <div style={{ padding: 24, fontFamily: 'system-ui, sans-serif' }}>
-      <h1>🔵 BlizzardBerry Agent Test</h1>
-      <p>Test stranica za frontend i backend akcije kroz BB agenta.</p>
-
-      {/* BlizzardBerry Agent Widget */}
-      <Script
-        id="blizzardberry-agent"
-        src="https://blizzardberry.com/agent/agent.js"
-        strategy="afterInteractive"
-        data-agent-id="2db456e4-3137-4fa8-9824-462b301b8729"
-      />
-
-      <div style={{
-        border: '2px solid #0070f3',
-        padding: 16,
-        margin: '16px 0',
-        background: '#f0f8ff',
-        borderRadius: 8
+    <div style={{
+      minHeight: '100vh',
+      fontFamily: 'system-ui, sans-serif',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
+      {/* Header */}
+      <header style={{
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        color: 'white',
+        padding: '20px 5%'
       }}>
-        <small>🔵 BlizzardBerry Agent će se pojaviti ovdje</small>
-      </div>
-
-      <hr style={{ margin: '24px 0' }} />
-
-      <details open={open}>
-        <summary style={{
-          cursor: 'pointer',
-          fontSize: '18px',
-          marginBottom: '12px'
-        }}>
-          📋 Test Panel (client action: <code>openTestPanel</code>)
-        </summary>
-
-        <form onSubmit={onSubmit} style={{
-          marginTop: 12,
-          padding: 16,
-          border: '1px solid #ddd',
-          borderRadius: 8,
-          backgroundColor: '#fff'
-        }}>
-          <label style={{ display: 'block', marginBottom: 8 }}>
-            Quantity:
-            <input
-              type="number"
-              value={qty}
-              onChange={(e) => setQty(e.target.value)}
-              min={1}
-              style={{
-                width: 80,
-                marginLeft: 8,
-                padding: 4,
-                border: '1px solid #ccc',
-                borderRadius: 4
-              }}
-            />
-          </label>
-          <button
-            type="submit"
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#0070f3',
-              color: 'white',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer'
-            }}
-          >
-            Submit
-          </button>
-        </form>
-
-        {submitted && (
-          <div style={{
-            marginTop: 16,
-            padding: 12,
-            backgroundColor: '#d4edda',
-            border: '1px solid #c3e6cb',
-            borderRadius: 4
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h1 style={{ margin: 0, fontSize: '2rem' }}>🤖 BlizzardBerry AI Agent Demo</h1>
+            <p style={{ margin: '5px 0 0', opacity: 0.9 }}>❄️ Arctic Supply Co. - Live AI Assistant</p>
+          </div>
+          <a href="/" style={{
+            color: 'white',
+            textDecoration: 'none',
+            padding: '10px 20px',
+            border: '1px solid white',
+            borderRadius: '20px'
           }}>
-            ✅ Submitted qty: <strong>{submitted.qty}</strong>
+            ← Back to Home
+          </a>
+        </div>
+      </header>
+
+      <div style={{ padding: '30px 5%' }}>
+        {/* BlizzardBerry Agent Widget */}
+        <Script
+          id="blizzardberry-agent"
+          src="https://blizzardberry.com/agent/agent.js"
+          strategy="afterInteractive"
+          data-agent-id="2db456e4-3137-4fa8-9824-462b301b8729"
+        />
+
+        {/* AI Agent Interface */}
+        <div style={{
+          background: 'white',
+          borderRadius: '15px',
+          padding: '30px',
+          marginBottom: '30px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{
+            background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
+            color: 'white',
+            padding: '20px',
+            borderRadius: '10px',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            <h2 style={{ margin: '0 0 10px' }}>🤖 AI Assistant is Ready</h2>
+            <p style={{ margin: 0, opacity: 0.9 }}>
+              Try asking: "What's our best-selling winter jacket?" or "Process an order for hiking boots"
+            </p>
+          </div>
+
+          <div style={{
+            border: '2px dashed #e0e0e0',
+            padding: '30px',
+            borderRadius: '10px',
+            textAlign: 'center',
+            background: '#f9f9f9'
+          }}>
+            <p style={{ margin: '0 0 10px', color: '#666', fontSize: '18px' }}>
+              🔵 BlizzardBerry AI Agent will appear here
+            </p>
+            <p style={{ margin: 0, color: '#999', fontSize: '14px' }}>
+              The AI can help with inventory, orders, product recommendations, and business insights
+            </p>
+          </div>
+        </div>
+
+        {/* Demo Actions Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '25px',
+          marginBottom: '30px'
+        }}>
+          {/* Customer Service Demo */}
+          <div style={{
+            background: 'white',
+            padding: '25px',
+            borderRadius: '15px',
+            boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ margin: '0 0 15px', color: '#333', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              💬 Customer Service Demo
+            </h3>
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '15px' }}>
+              Try these customer service scenarios with the AI:
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button style={{
+                background: '#4CAF50',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Check availability of winter jackets"
+              </button>
+              <button style={{
+                background: '#2196F3',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "I need gear for mountain climbing"
+              </button>
+              <button style={{
+                background: '#FF9800',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Track my recent order"
+              </button>
+            </div>
+          </div>
+
+          {/* Inventory Management Demo */}
+          <div style={{
+            background: 'white',
+            padding: '25px',
+            borderRadius: '15px',
+            boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ margin: '0 0 15px', color: '#333', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              📦 Inventory Management
+            </h3>
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '15px' }}>
+              AI can manage inventory automatically:
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button style={{
+                background: '#673AB7',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Check stock levels for all products"
+              </button>
+              <button style={{
+                background: '#E91E63',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Transfer 10 ski poles to Warehouse B"
+              </button>
+              <button style={{
+                background: '#795548',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "What products need reordering?"
+              </button>
+            </div>
+          </div>
+
+          {/* Business Analytics Demo */}
+          <div style={{
+            background: 'white',
+            padding: '25px',
+            borderRadius: '15px',
+            boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ margin: '0 0 15px', color: '#333', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              📊 Business Analytics
+            </h3>
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '15px' }}>
+              Get intelligent business insights:
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button style={{
+                background: '#009688',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Show me sales performance"
+              </button>
+              <button style={{
+                background: '#FF5722',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "What are our top products?"
+              </button>
+              <button style={{
+                background: '#607D8B',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}>
+                "Give me business recommendations"
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Display */}
+        {(orderProcessed || inventoryUpdated || submitted) && (
+          <div style={{
+            background: 'white',
+            padding: '25px',
+            borderRadius: '15px',
+            boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
+            marginBottom: '30px'
+          }}>
+            <h3 style={{ margin: '0 0 20px', color: '#333' }}>🎯 AI Action Results</h3>
+
+            {orderProcessed && (
+              <div style={{
+                background: '#e8f5e8',
+                border: '1px solid #4CAF50',
+                padding: '15px',
+                borderRadius: '8px',
+                marginBottom: '15px'
+              }}>
+                <h4 style={{ margin: '0 0 10px', color: '#2E7D32' }}>✅ Order Processed Successfully</h4>
+                <p style={{ margin: '5px 0' }}><strong>Order ID:</strong> {orderProcessed.orderId}</p>
+                <p style={{ margin: '5px 0' }}><strong>Product:</strong> {orderProcessed.product}</p>
+                <p style={{ margin: '5px 0' }}><strong>Quantity:</strong> {orderProcessed.quantity}</p>
+                <p style={{ margin: '5px 0' }}><strong>Total:</strong> ${orderProcessed.totalPrice}</p>
+                <p style={{ margin: '5px 0' }}><strong>Delivery:</strong> {orderProcessed.estimatedDelivery}</p>
+              </div>
+            )}
+
+            {inventoryUpdated && (
+              <div style={{
+                background: '#e3f2fd',
+                border: '1px solid #2196F3',
+                padding: '15px',
+                borderRadius: '8px',
+                marginBottom: '15px'
+              }}>
+                <h4 style={{ margin: '0 0 10px', color: '#1976D2' }}>📦 Inventory Transfer Completed</h4>
+                <p style={{ margin: '5px 0' }}><strong>Transfer ID:</strong> {inventoryUpdated.transferId}</p>
+                <p style={{ margin: '5px 0' }}><strong>Product:</strong> {inventoryUpdated.product}</p>
+                <p style={{ margin: '5px 0' }}><strong>Quantity:</strong> {inventoryUpdated.quantity}</p>
+                <p style={{ margin: '5px 0' }}><strong>From:</strong> {inventoryUpdated.from} → <strong>To:</strong> {inventoryUpdated.to}</p>
+              </div>
+            )}
+
+            {submitted && (
+              <div style={{
+                background: '#fff3e0',
+                border: '1px solid #FF9800',
+                padding: '15px',
+                borderRadius: '8px'
+              }}>
+                <h4 style={{ margin: '0 0 10px', color: '#F57C00' }}>📋 Form Submitted</h4>
+                <p style={{ margin: '5px 0' }}><strong>Quantity:</strong> {submitted.qty}</p>
+              </div>
+            )}
           </div>
         )}
-      </details>
 
-      <hr style={{ margin: '24px 0' }} />
+        {/* Technical Information */}
+        <details style={{
+          background: 'white',
+          padding: '25px',
+          borderRadius: '15px',
+          boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+        }}>
+          <summary style={{
+            cursor: 'pointer',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: '15px'
+          }}>
+            🛠️ Technical Integration Details
+          </summary>
 
-      <h3>🧪 Manual API Test</h3>
-      <div style={{ fontSize: '14px', fontFamily: 'monospace' }}>
-        <p>Test backend rute direktno:</p>
-        <ul>
-          <li>GET /api/ping</li>
-          <li>POST /api/calc/sum {"{ a: 2, b: 3 }"}</li>
-          <li>POST /api/inventory/transfer {"{ sku: 'ABC', from: 'A', to: 'B', qty: 5 }"}</li>
-        </ul>
+          <div style={{ marginTop: '20px' }}>
+            <h4 style={{ color: '#333', marginBottom: '10px' }}>Available AI Actions:</h4>
+            <div style={{
+              background: '#f5f5f5',
+              padding: '15px',
+              borderRadius: '8px',
+              fontFamily: 'monospace',
+              fontSize: '12px',
+              overflow: 'auto'
+            }}>
+              <div>• <strong>checkInventory</strong>({`{ sku: "APW-001" }`})</div>
+              <div>• <strong>processOrder</strong>({`{ sku: "MHB-102", quantity: 2 }`})</div>
+              <div>• <strong>transferInventory</strong>({`{ sku: "CFP-304", qty: 5 }`})</div>
+              <div>• <strong>getProductRecommendations</strong>({`{ category: "winter", budget: 300 }`})</div>
+              <div>• <strong>getBusinessInsights</strong>()</div>
+              <div>• <strong>openCustomerInquiry</strong>()</div>
+            </div>
+
+            <h4 style={{ color: '#333', marginTop: '20px', marginBottom: '10px' }}>Available API Endpoints:</h4>
+            <div style={{
+              background: '#f5f5f5',
+              padding: '15px',
+              borderRadius: '8px',
+              fontFamily: 'monospace',
+              fontSize: '12px'
+            }}>
+              <div>• GET /api/ping</div>
+              <div>• POST /api/calc/sum</div>
+              <div>• POST /api/inventory/transfer</div>
+              <div>• GET /api/products</div>
+              <div>• POST /api/orders</div>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   );
