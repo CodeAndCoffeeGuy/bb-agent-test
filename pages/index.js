@@ -74,29 +74,30 @@ export default function Home() {
           we supply the gear that keeps explorers moving forward.
         </p>
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-          <button style={{
+          <a href="/products" style={{
             background: '#4CAF50',
             color: 'white',
-            border: 'none',
+            textDecoration: 'none',
             padding: '15px 30px',
             fontSize: '18px',
             borderRadius: '30px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+            display: 'inline-block'
           }}>
             Shop Now
-          </button>
-          <button style={{
+          </a>
+          <a href="/products" style={{
             background: 'transparent',
             color: 'white',
             border: '2px solid white',
+            textDecoration: 'none',
             padding: '15px 30px',
             fontSize: '18px',
             borderRadius: '30px',
-            cursor: 'pointer'
+            display: 'inline-block'
           }}>
             View Catalog
-          </button>
+          </a>
         </div>
       </section>
 
@@ -152,19 +153,19 @@ export default function Home() {
           </div>
         </div>
         <div style={{ marginTop: '40px' }}>
-          <button style={{
+          <a href="/products" style={{
             background: '#4CAF50',
             color: 'white',
             padding: '18px 40px',
             borderRadius: '30px',
-            border: 'none',
+            textDecoration: 'none',
             fontSize: '18px',
             fontWeight: 'bold',
-            cursor: 'pointer',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.3)'
+            boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
+            display: 'inline-block'
           }}>
             Shop Premium Collection →
-          </button>
+          </a>
         </div>
       </section>
 
