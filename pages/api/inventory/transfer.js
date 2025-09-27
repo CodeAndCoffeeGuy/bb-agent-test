@@ -20,8 +20,17 @@ export default async function handler(req, res) {
 
   const { sku, from, to, qty, idempotencyKey } = req.body || {};
 
+  // Debug logging
+  console.log('📦 Received request body:', JSON.stringify(req.body, null, 2));
+  console.log('📋 Extracted fields:', { sku, from, to, qty });
+
   if (!sku || !from || !to || !qty) {
-    return res.status(400).json({ error: 'Missing fields' });
+    console.log('❌ Missing fields error');
+    return res.status(400).json({
+      error: 'Missing fields',
+      received: { sku, from, to, qty },
+      body: req.body
+    });
   }
 
   // Create deterministic idempotency key based on request content only
