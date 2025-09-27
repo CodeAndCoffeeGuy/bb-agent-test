@@ -1,3 +1,5 @@
+import Script from 'next/script';
+
 export default function Home() {
   return (
     <div style={{
@@ -5,6 +7,13 @@ export default function Home() {
       fontFamily: 'system-ui, sans-serif',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     }}>
+      {/* BlizzardBerry Agent Widget - appears naturally */}
+      <Script
+        id="blizzardberry-agent"
+        src="https://blizzardberry.com/agent/agent.js"
+        strategy="afterInteractive"
+        data-agent-id="2db456e4-3137-4fa8-9824-462b301b8729"
+      />
       {/* Navigation */}
       <nav style={{
         display: 'flex',
@@ -25,16 +34,17 @@ export default function Home() {
         </div>
         <div style={{ display: 'flex', gap: '30px' }}>
           <a href="#products" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Products</a>
+          <a href="#about" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>About</a>
           <a href="/inventory" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Inventory</a>
           <a href="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>Dashboard</a>
-          <a href="/agent-test" style={{
-            background: '#ff6b6b',
+          <a href="/support" style={{
+            background: '#4CAF50',
             color: 'white',
             padding: '10px 20px',
             borderRadius: '25px',
             textDecoration: 'none',
             fontSize: '16px'
-          }}>AI Agent Demo</a>
+          }}>Support</a>
         </div>
       </nav>
 
@@ -114,45 +124,46 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Agent Showcase */}
+      {/* Company Values Section */}
       <section style={{
         background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
         padding: '80px 5%',
         color: 'white',
         textAlign: 'center'
       }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '30px' }}>Powered by BlizzardBerry AI</h2>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '30px' }}>Why Choose Arctic Supply Co.</h2>
         <p style={{ fontSize: '1.2rem', marginBottom: '40px', maxWidth: '800px', margin: '0 auto 40px' }}>
-          Experience the future of business automation. Our AI agent manages inventory,
-          processes orders, analyzes trends, and provides intelligent customer service 24/7.
+          With over a decade of experience in extreme weather conditions, we understand what it takes
+          to keep you safe and equipped for any adventure.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px', marginTop: '50px' }}>
           <div style={{ background: 'rgba(255,255,255,0.1)', padding: '30px', borderRadius: '15px' }}>
-            <h4 style={{ marginBottom: '15px' }}>📊 Smart Inventory</h4>
-            <p>Real-time stock tracking with predictive reordering</p>
+            <h4 style={{ marginBottom: '15px' }}>🌡️ Extreme Weather Tested</h4>
+            <p>All products tested in real Arctic conditions to ensure maximum performance</p>
           </div>
           <div style={{ background: 'rgba(255,255,255,0.1)', padding: '30px', borderRadius: '15px' }}>
-            <h4 style={{ marginBottom: '15px' }}>🤖 AI Customer Service</h4>
-            <p>Intelligent chatbot handling inquiries and orders</p>
+            <h4 style={{ marginBottom: '15px' }}>🚚 Fast Global Shipping</h4>
+            <p>Express delivery worldwide with tracking and insurance on all orders</p>
           </div>
           <div style={{ background: 'rgba(255,255,255,0.1)', padding: '30px', borderRadius: '15px' }}>
-            <h4 style={{ marginBottom: '15px' }}>📈 Business Analytics</h4>
-            <p>Advanced insights and trend analysis</p>
+            <h4 style={{ marginBottom: '15px' }}>🛡️ Lifetime Warranty</h4>
+            <p>Comprehensive warranty and repair service for all premium equipment</p>
           </div>
         </div>
         <div style={{ marginTop: '40px' }}>
-          <a href="/agent-test" style={{
-            background: '#ff6b6b',
+          <button style={{
+            background: '#4CAF50',
             color: 'white',
             padding: '18px 40px',
             borderRadius: '30px',
-            textDecoration: 'none',
+            border: 'none',
             fontSize: '18px',
             fontWeight: 'bold',
+            cursor: 'pointer',
             boxShadow: '0 6px 20px rgba(0,0,0,0.3)'
           }}>
-            Try AI Agent Demo →
-          </a>
+            Shop Premium Collection →
+          </button>
         </div>
       </section>
 
@@ -169,13 +180,14 @@ export default function Home() {
             <p style={{ margin: '5px 0', opacity: 0.8 }}>Premium outdoor equipment since 2020</p>
           </div>
           <div style={{ display: 'flex', gap: '30px' }}>
-            <a href="/inventory" style={{ color: '#4CAF50', textDecoration: 'none' }}>Inventory System</a>
-            <a href="/dashboard" style={{ color: '#4CAF50', textDecoration: 'none' }}>Analytics Dashboard</a>
-            <a href="/agent-test" style={{ color: '#ff6b6b', textDecoration: 'none' }}>AI Demo</a>
+            <a href="#products" style={{ color: '#ccc', textDecoration: 'none' }}>Products</a>
+            <a href="#about" style={{ color: '#ccc', textDecoration: 'none' }}>About Us</a>
+            <a href="#contact" style={{ color: '#ccc', textDecoration: 'none' }}>Contact</a>
+            <a href="/support" style={{ color: '#ccc', textDecoration: 'none' }}>Support</a>
           </div>
         </div>
         <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #555', opacity: 0.7 }}>
-          Powered by BlizzardBerry AI Agent Technology
+          © 2024 Arctic Supply Co. All rights reserved. | Professional outdoor equipment for extreme conditions.
         </div>
       </footer>
     </div>

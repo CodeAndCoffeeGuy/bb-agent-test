@@ -239,17 +239,17 @@ export default function Dashboard() {
               ))}
             </div>
             <div style={{ marginTop: '20px' }}>
-              <a href="/agent-test" style={{
+              <button style={{
                 background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
                 color: 'white',
                 padding: '12px 20px',
                 borderRadius: '8px',
-                textDecoration: 'none',
+                border: 'none',
                 fontSize: '14px',
-                display: 'inline-block'
+                cursor: 'pointer'
               }}>
-                🤖 Ask AI Assistant
-              </a>
+                📞 Contact Support Team
+              </button>
             </div>
           </div>
         </div>
@@ -341,36 +341,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* AI Insights Panel */}
-      <div style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
-        color: 'white',
-        padding: '20px',
-        borderRadius: '15px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-        maxWidth: '320px'
-      }}>
-        <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          🤖 BlizzardBerry AI Insights
-        </h4>
-        <p style={{ margin: '0 0 15px', fontSize: '14px', opacity: 0.9 }}>
-          AI detected seasonal demand spike for winter gear. Consider increasing winter apparel inventory by 25%.
-        </p>
-        <a href="/agent-test" style={{
-          background: '#ff6b6b',
-          color: 'white',
-          padding: '10px 20px',
-          borderRadius: '20px',
-          textDecoration: 'none',
-          fontSize: '14px',
-          display: 'inline-block'
-        }}>
-          Get AI Recommendations →
-        </a>
-      </div>
     </div>
   );
 }

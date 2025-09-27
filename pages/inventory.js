@@ -367,36 +367,6 @@ export default function Inventory() {
         )}
       </div>
 
-      {/* AI Assistant Panel */}
-      <div style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
-        color: 'white',
-        padding: '20px',
-        borderRadius: '15px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-        maxWidth: '300px'
-      }}>
-        <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          🤖 BlizzardBerry AI
-        </h4>
-        <p style={{ margin: '0 0 15px', fontSize: '14px', opacity: 0.9 }}>
-          AI detected {inventory.filter(item => item.status === 'low_stock').length} items need reordering
-        </p>
-        <a href="/agent-test" style={{
-          background: '#ff6b6b',
-          color: 'white',
-          padding: '10px 20px',
-          borderRadius: '20px',
-          textDecoration: 'none',
-          fontSize: '14px',
-          display: 'inline-block'
-        }}>
-          Talk to AI Agent →
-        </a>
-      </div>
     </div>
   );
 }

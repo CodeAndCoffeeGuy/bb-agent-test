@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
-export default function AgentTest() {
+export default function Support() {
   const [open, setOpen] = useState(false);
   const [qty, setQty] = useState(1);
   const [submitted, setSubmitted] = useState(null);
@@ -158,8 +158,8 @@ export default function AgentTest() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: '2rem' }}>🤖 BlizzardBerry AI Agent Demo</h1>
-            <p style={{ margin: '5px 0 0', opacity: 0.9 }}>❄️ Arctic Supply Co. - Live AI Assistant</p>
+            <h1 style={{ margin: 0, fontSize: '2rem' }}>❄️ Arctic Supply Co. Support</h1>
+            <p style={{ margin: '5px 0 0', opacity: 0.9 }}>Customer Service & Technical Support</p>
           </div>
           <a href="/" style={{
             color: 'white',
@@ -182,7 +182,7 @@ export default function AgentTest() {
           data-agent-id="2db456e4-3137-4fa8-9824-462b301b8729"
         />
 
-        {/* AI Agent Interface */}
+        {/* Customer Support Section */}
         <div style={{
           background: 'white',
           borderRadius: '15px',
@@ -190,32 +190,23 @@ export default function AgentTest() {
           marginBottom: '30px',
           boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
         }}>
-          <div style={{
-            background: 'linear-gradient(45deg, #1e3c72 0%, #2a5298 100%)',
-            color: 'white',
-            padding: '20px',
-            borderRadius: '10px',
-            marginBottom: '20px',
-            textAlign: 'center'
-          }}>
-            <h2 style={{ margin: '0 0 10px' }}>🤖 AI Assistant is Ready</h2>
-            <p style={{ margin: 0, opacity: 0.9 }}>
-              Try asking: "What's our best-selling winter jacket?" or "Process an order for hiking boots"
-            </p>
-          </div>
+          <h2 style={{ margin: '0 0 20px', color: '#333', textAlign: 'center' }}>How can we help you today?</h2>
+          <p style={{ textAlign: 'center', color: '#666', marginBottom: '30px' }}>
+            Our customer service team is here to assist with orders, product information, and technical support.
+          </p>
 
           <div style={{
-            border: '2px dashed #e0e0e0',
+            border: '1px solid #e0e0e0',
             padding: '30px',
             borderRadius: '10px',
             textAlign: 'center',
             background: '#f9f9f9'
           }}>
-            <p style={{ margin: '0 0 10px', color: '#666', fontSize: '18px' }}>
-              🔵 BlizzardBerry AI Agent will appear here
+            <p style={{ margin: '0 0 10px', color: '#666', fontSize: '16px' }}>
+              💬 Live Chat Support Available
             </p>
             <p style={{ margin: 0, color: '#999', fontSize: '14px' }}>
-              The AI can help with inventory, orders, product recommendations, and business insights
+              Ask about products, track orders, get recommendations, or request technical assistance
             </p>
           </div>
         </div>
